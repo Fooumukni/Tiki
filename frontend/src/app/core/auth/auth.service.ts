@@ -12,12 +12,16 @@ export class AuthService {
   });
 
   async initialize(): Promise<void> {
-    await this.keycloak.init({
-      onLoad: 'check-sso',
-      silentCheckSsoRedirectUri: `${window.location.origin}/assets/silent-check-sso.html`,
-      pkceMethod: 'S256',
-      checkLoginIframe: false,
-    });
+    try {
+      await this.keycloak.init({
+        onLoad: 'check-sso',
+        silentCheckSsoRedirectUri: new URL('assets/silent-check-sso.html', document.baseURI).toString(),
+        pkceMethod: 'S256',
+        checkLoginIframe: false,
+      });
+    } catch {
+      return;
+    }
   }
 
   isAuthenticated(): boolean {
@@ -26,19 +30,19 @@ export class AuthService {
 
   async login(returnPath = '/dashboard'): Promise<void> {
     await this.keycloak.login({
-      redirectUri: `${window.location.origin}${returnPath}`,
+      redirectUri: this.getApplicationUrl(returnPath),
     });
   }
 
   async register(returnPath = '/dashboard'): Promise<void> {
     await this.keycloak.register({
-      redirectUri: `${window.location.origin}${returnPath}`,
+      redirectUri: this.getApplicationUrl(returnPath),
     });
   }
 
   async logout(): Promise<void> {
     await this.keycloak.logout({
-      redirectUri: window.location.origin,
+      redirectUri: this.getApplicationUrl(),
     });
   }
 
@@ -71,5 +75,9 @@ export class AuthService {
         window.setTimeout(() => reject(new Error('Keycloak token refresh timed out')), timeoutMs);
       }),
     ]);
+  }
+
+  private getApplicationUrl(path = ''): string {
+    return new URL(path.replace(/^\/+/, ''), document.baseURI).toString();
   }
 }
