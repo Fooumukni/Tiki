@@ -72,8 +72,8 @@ services:
       KC_DB_USERNAME: ${POSTGRES_KEYCLOAK_USER:-tiki_keycloak}
       KC_DB_PASSWORD: ${POSTGRES_KEYCLOAK_PASSWORD:-}
       KC_HTTP_ENABLED: "true"
-      KC_HTTP_RELATIVE_PATH: /auth
-      KC_HOSTNAME: ${KEYCLOAK_BASE_URL:-https://api.example.com/auth}
+      KC_HTTP_RELATIVE_PATH: /
+      KC_HOSTNAME: ${KEYCLOAK_BASE_URL:-https://auth.tiki.cimemyc.online}
       KC_HOSTNAME_STRICT: "false"
       KC_PROXY_HEADERS: xforwarded
       KC_HEALTH_ENABLED: "true"
@@ -108,16 +108,16 @@ services:
       REDIS_PORT: 6379
       REDIS_PASSWORD: ${REDIS_PASSWORD:-}
       REDIS_URL: ""
-      KEYCLOAK_BASE_URL: ${APP_BASE_URL:-https://api.example.com}/auth
+      KEYCLOAK_BASE_URL: ${KEYCLOAK_BASE_URL:-https://auth.tiki.cimemyc.online}
       KEYCLOAK_REALM: ${KEYCLOAK_REALM:-tiki}
       KEYCLOAK_FRONTEND_CLIENT_ID: ${KEYCLOAK_FRONTEND_CLIENT_ID:-tiki-frontend}
       KEYCLOAK_BACKEND_CLIENT_ID: ${KEYCLOAK_BACKEND_CLIENT_ID:-tiki-api}
       KEYCLOAK_AUDIENCE: ${KEYCLOAK_AUDIENCE:-tiki-api}
-      KEYCLOAK_ISSUER_URL: ${KEYCLOAK_ISSUER_URL:-https://api.example.com/auth/realms/tiki}
-      KEYCLOAK_JWKS_URI: ${KEYCLOAK_JWKS_URI:-https://api.example.com/auth/realms/tiki/protocol/openid-connect/certs}
-      FRONTEND_URL: ${FRONTEND_URL:-https://<github-user>.github.io}
-      APP_CORS_ORIGIN: ${APP_CORS_ORIGIN:-https://<github-user>.github.io}
-      APP_BASE_URL: ${APP_BASE_URL:-https://api.example.com}
+      KEYCLOAK_ISSUER_URL: ${KEYCLOAK_ISSUER_URL:-https://auth.tiki.cimemyc.online/realms/tiki}
+      KEYCLOAK_JWKS_URI: ${KEYCLOAK_JWKS_URI:-http://keycloak:8080/realms/tiki/protocol/openid-connect/certs}
+      FRONTEND_URL: ${FRONTEND_URL:-https://tiki.cimemyc.online}
+      APP_CORS_ORIGIN: ${APP_CORS_ORIGIN:-https://tiki.cimemyc.online}
+      APP_BASE_URL: ${APP_BASE_URL:-https://api.tiki.cimemyc.online}
     expose:
       - "3100"
     depends_on:

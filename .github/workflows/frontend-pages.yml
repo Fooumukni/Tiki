@@ -49,11 +49,12 @@ jobs:
           fi
           BUILD_DIR=$(dirname "$BUILD_INDEX")
           cp "$BUILD_DIR/index.html" "$BUILD_DIR/404.html"
+          echo "tiki.cimemyc.online" > "$BUILD_DIR/CNAME"
           cat > "$BUILD_DIR/assets/app-config.js" <<EOF
           window.__APP_CONFIG__ = {
-            apiBaseUrl: '${{ vars.TIKI_API_BASE_URL || 'http://146.181.61.24/api' }}',
+            apiBaseUrl: '${{ vars.TIKI_API_BASE_URL || 'https://api.tiki.cimemyc.online/api' }}',
             keycloak: {
-              url: '${{ vars.TIKI_KEYCLOAK_URL || 'http://146.181.61.24/auth' }}',
+              url: '${{ vars.TIKI_KEYCLOAK_URL || 'https://auth.tiki.cimemyc.online' }}',
               realm: '${{ vars.TIKI_KEYCLOAK_REALM || 'tiki' }}',
               clientId: '${{ vars.TIKI_KEYCLOAK_CLIENT_ID || 'tiki-frontend' }}'
             }
