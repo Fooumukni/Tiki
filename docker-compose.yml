@@ -73,7 +73,7 @@ services:
       KC_DB_PASSWORD: ${POSTGRES_KEYCLOAK_PASSWORD:-}
       KC_HTTP_ENABLED: "true"
       KC_HTTP_RELATIVE_PATH: /auth
-      KC_HOSTNAME: ${APP_BASE_URL:-https://api.example.com}
+      KC_HOSTNAME: ${KEYCLOAK_BASE_URL:-https://api.example.com/auth}
       KC_HOSTNAME_STRICT: "false"
       KC_PROXY_HEADERS: xforwarded
       KC_HEALTH_ENABLED: "true"

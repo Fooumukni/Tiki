@@ -32,14 +32,14 @@
       "serviceAccountsEnabled": false,
       "protocol": "openid-connect",
       "redirectUris": [
-        "https://<github-user>.github.io/Tiki/*",
+        "https://fooumukni.github.io/Tiki/*",
         "http://localhost/*",
         "http://localhost:8080/*",
         "http://localhost:4200/*",
         "http://localhost:4210/*"
       ],
       "webOrigins": [
-        "https://<github-user>.github.io",
+        "https://fooumukni.github.io",
         "http://localhost",
         "http://localhost:8080",
         "http://localhost:4200",

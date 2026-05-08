@@ -51,9 +51,9 @@ jobs:
           cp "$BUILD_DIR/index.html" "$BUILD_DIR/404.html"
           cat > "$BUILD_DIR/assets/app-config.js" <<EOF
           window.__APP_CONFIG__ = {
-            apiBaseUrl: '${{ vars.TIKI_API_BASE_URL || 'https://api.example.com/api' }}',
+            apiBaseUrl: '${{ vars.TIKI_API_BASE_URL || 'http://146.181.61.24/api' }}',
             keycloak: {
-              url: '${{ vars.TIKI_KEYCLOAK_URL || 'https://api.example.com/auth' }}',
+              url: '${{ vars.TIKI_KEYCLOAK_URL || 'http://146.181.61.24/auth' }}',
               realm: '${{ vars.TIKI_KEYCLOAK_REALM || 'tiki' }}',
               clientId: '${{ vars.TIKI_KEYCLOAK_CLIENT_ID || 'tiki-frontend' }}'
             }
