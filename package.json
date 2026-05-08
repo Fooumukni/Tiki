@@ -1,0 +1,39 @@
+{
+  "name": "tiki",
+  "version": "0.1.0",
+  "author": "Marcelo Antonio Choque Burgoa",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev:backend": "npm run start:dev -w @tiki/backend",
+    "dev:frontend": "npm run start -w @tiki/frontend",
+    "build": "npm run build -w @tiki/backend && npm run build -w @tiki/frontend",
+    "build:backend": "npm run build -w @tiki/backend",
+    "build:frontend": "npm run build -w @tiki/frontend",
+    "build:pages": "npm run build:pages -w @tiki/frontend",
+    "lint": "npm run lint -w @tiki/backend && npm run lint -w @tiki/frontend",
+    "test": "npm run test -w @tiki/backend && npm run test -w @tiki/frontend",
+    "test:e2e": "npm run test:e2e -w @tiki/backend",
+    "prisma:generate": "npm run prisma:generate -w @tiki/backend",
+    "prisma:validate": "npm run prisma:validate -w @tiki/backend",
+    "prisma:migrate": "npm run prisma:migrate -w @tiki/backend --",
+    "prisma:migrate:init": "npm run prisma:migrate -w @tiki/backend -- --name init",
+    "prisma:migrate:deploy": "npm run prisma:migrate:deploy -w @tiki/backend",
+    "infra:up": "docker compose up -d postgres_app postgres_keycloak redis keycloak",
+    "infra:down": "docker compose down"
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0"
+  },
+  "devDependencies": {
+    "@nestjs/testing": "^11.1.19",
+    "@types/supertest": "^7.2.0",
+    "jsdom": "^29.1.1",
+    "supertest": "^7.2.2",
+    "vitest": "^4.1.5"
+  }
+}

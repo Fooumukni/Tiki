@@ -1,0 +1,279 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum OrganizationPlan {
+  DEMO
+  FREE
+  PRO
+}
+
+enum OrganizationRole {
+  ORG_ADMIN
+  AGENT
+  VIEWER
+}
+
+enum IssueStatus {
+  NEW
+  TRIAGED
+  IN_PROGRESS
+  WAITING_CUSTOMER
+  RESOLVED
+  CLOSED
+}
+
+enum IssuePriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum SourceChannel {
+  DASHBOARD
+  PUBLIC_FORM
+  TELEGRAM
+  EMAIL
+  API
+  WHATSAPP
+}
+
+enum AiAnalysisStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum Sentiment {
+  NEUTRAL
+  FRUSTRATED
+  ANGRY
+  CONFUSED
+  URGENT
+}
+
+enum SenderType {
+  REQUESTER
+  AGENT
+  SYSTEM
+  AI
+}
+
+enum ChannelType {
+  TELEGRAM
+  PUBLIC_FORM
+  EMAIL
+  API
+}
+
+model Organization {
+  id                 String               @id @default(uuid()) @db.Uuid
+  name               String
+  slug               String               @unique
+  plan               OrganizationPlan     @default(DEMO)
+  aiUsageLimit       Int                  @default(100)
+  aiUsageCount       Int                  @default(0)
+  isActive           Boolean              @default(true)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  members            OrganizationMember[]
+  requesters         Requester[]
+  issues             Issue[]
+  channelConnections ChannelConnection[]
+  auditLogs          AuditLog[]
+  conversationSessions ConversationSession[]
+
+  @@index([createdAt])
+}
+
+model UserProfile {
+  id             String               @id @default(uuid()) @db.Uuid
+  keycloakUserId String               @unique
+  email          String
+  fullName       String?
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+  memberships    OrganizationMember[]
+  auditLogs      AuditLog[]
+
+  @@index([email])
+  @@index([createdAt])
+}
+
+model OrganizationMember {
+  id             String           @id @default(uuid()) @db.Uuid
+  organizationId String           @db.Uuid
+  userProfileId  String           @db.Uuid
+  role           OrganizationRole @default(VIEWER)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userProfile    UserProfile      @relation(fields: [userProfileId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, userProfileId])
+  @@index([organizationId])
+  @@index([userProfileId])
+  @@index([role])
+  @@index([createdAt])
+}
+
+model Requester {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String       @db.Uuid
+  name           String
+  email          String?
+  phone          String?
+  telegramUserId String?
+  telegramChatId String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  issues         Issue[]
+
+  @@unique([organizationId, email])
+  @@unique([organizationId, telegramUserId])
+  @@index([organizationId])
+  @@index([email])
+  @@index([telegramUserId])
+  @@index([createdAt])
+}
+
+model Issue {
+  id                  String           @id @default(uuid()) @db.Uuid
+  organizationId      String           @db.Uuid
+  requesterId         String?          @db.Uuid
+  code                String
+  title               String
+  originalDescription String           @db.Text
+  generatedTitle      String?
+  summary             String?          @db.Text
+  category            String?
+  priority            IssuePriority    @default(MEDIUM)
+  sentiment           Sentiment?
+  suggestedTeam       String?
+  suggestedResponse   String?          @db.Text
+  tags                String[]         @default([])
+  sourceChannel       SourceChannel    @default(DASHBOARD)
+  status              IssueStatus      @default(NEW)
+  aiAnalysisStatus    AiAnalysisStatus @default(PENDING)
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  resolvedAt          DateTime?
+  organization        Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  requester           Requester?       @relation(fields: [requesterId], references: [id], onDelete: SetNull)
+  messages            IssueMessage[]
+  aiAnalysisLogs      AiAnalysisLog[]
+
+  @@unique([organizationId, code])
+  @@index([organizationId])
+  @@index([requesterId])
+  @@index([status])
+  @@index([priority])
+  @@index([sourceChannel])
+  @@index([createdAt])
+}
+
+model IssueMessage {
+  id            String        @id @default(uuid()) @db.Uuid
+  issueId       String        @db.Uuid
+  senderType    SenderType
+  senderName    String?
+  content       String        @db.Text
+  sourceChannel SourceChannel
+  createdAt     DateTime      @default(now())
+  issue         Issue         @relation(fields: [issueId], references: [id], onDelete: Cascade)
+
+  @@index([issueId])
+  @@index([senderType])
+  @@index([sourceChannel])
+  @@index([createdAt])
+}
+
+model ChannelConnection {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String       @db.Uuid
+  channel        ChannelType
+  identifier     String
+  secretCode     String       @unique
+  isActive       Boolean      @default(true)
+  metadata       Json?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, channel, identifier])
+  @@unique([channel, identifier])
+  @@index([organizationId])
+  @@index([channel])
+  @@index([isActive])
+  @@index([createdAt])
+}
+
+model AiAnalysisLog {
+  id             String           @id @default(uuid()) @db.Uuid
+  issueId        String           @db.Uuid
+  provider       String
+  prompt         String           @db.Text
+  rawResponse    String?          @db.Text
+  parsedResponse Json?
+  status         AiAnalysisStatus
+  errorMessage   String?          @db.Text
+  createdAt      DateTime         @default(now())
+  issue          Issue            @relation(fields: [issueId], references: [id], onDelete: Cascade)
+
+  @@index([issueId])
+  @@index([provider])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model AuditLog {
+  id             String        @id @default(uuid()) @db.Uuid
+  userProfileId  String?       @db.Uuid
+  organizationId String?       @db.Uuid
+  action         String
+  entityType     String
+  entityId       String
+  metadata       Json?
+  createdAt      DateTime      @default(now())
+  userProfile    UserProfile?  @relation(fields: [userProfileId], references: [id], onDelete: SetNull)
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+
+  @@index([userProfileId])
+  @@index([organizationId])
+  @@index([action])
+  @@index([entityType])
+  @@index([createdAt])
+}
+
+enum ConversationSessionStatus {
+  GATHERING
+  COMPLETED
+  EXPIRED
+}
+
+model ConversationSession {
+  id             String                    @id @default(uuid()) @db.Uuid
+  organizationId String                    @db.Uuid
+  telegramChatId String
+  telegramUserId String
+  requesterName  String
+  status         ConversationSessionStatus @default(GATHERING)
+  messages       Json                      @default("[]")
+  questionCount  Int                       @default(0)
+  expiresAt      DateTime
+  createdAt      DateTime                  @default(now())
+  updatedAt      DateTime                  @updatedAt
+  organization   Organization              @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([telegramChatId, telegramUserId, status])
+  @@index([expiresAt])
+}

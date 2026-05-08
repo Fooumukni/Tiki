@@ -1,0 +1,19 @@
+services:
+  backend:
+    restart: always
+
+  postgres_app:
+    restart: always
+
+  postgres_keycloak:
+    restart: always
+
+  redis:
+    restart: always
+
+  keycloak:
+    restart: always
+    command: ["start", "--import-realm"]
+
+  nginx:
+    restart: always

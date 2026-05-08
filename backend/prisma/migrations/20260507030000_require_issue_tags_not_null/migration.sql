@@ -1,0 +1,3 @@
+UPDATE "Issue" SET "tags" = ARRAY[]::TEXT[] WHERE "tags" IS NULL;
+
+ALTER TABLE "Issue" ALTER COLUMN "tags" SET NOT NULL;

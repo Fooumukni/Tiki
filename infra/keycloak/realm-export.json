@@ -1,0 +1,80 @@
+{
+  "realm": "tiki",
+  "enabled": true,
+  "registrationAllowed": true,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
+  "sslRequired": "external",
+  "roles": {
+    "realm": [
+      {
+        "name": "platform_user",
+        "description": "Default authenticated platform user"
+      },
+      {
+        "name": "platform_admin",
+        "description": "Platform administrator"
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "tiki-frontend",
+      "name": "Tiki Frontend",
+      "description": "Public Angular frontend client",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "implicitFlowEnabled": false,
+      "serviceAccountsEnabled": false,
+      "protocol": "openid-connect",
+      "redirectUris": [
+        "https://<github-user>.github.io/Tiki/*",
+        "http://localhost/*",
+        "http://localhost:8080/*",
+        "http://localhost:4200/*",
+        "http://localhost:4210/*"
+      ],
+      "webOrigins": [
+        "https://<github-user>.github.io",
+        "http://localhost",
+        "http://localhost:8080",
+        "http://localhost:4200",
+        "http://localhost:4210"
+      ],
+      "protocolMappers": [
+        {
+          "name": "tiki-api-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.client.audience": "tiki-api",
+            "id.token.claim": "false",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256"
+      }
+    },
+    {
+      "clientId": "tiki-api",
+      "name": "Tiki API",
+      "description": "Backend API client reserved for future service-level authentication",
+      "enabled": true,
+      "publicClient": false,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "implicitFlowEnabled": false,
+      "serviceAccountsEnabled": false,
+      "protocol": "openid-connect"
+    }
+  ]
+}
