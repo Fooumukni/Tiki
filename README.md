@@ -1,28 +1,180 @@
-# Tiki
+<img  /><p align="center">
+  <img src="frontend/src/assets/tiki-logo.png" alt="Tiki logo" width="120" />
+</p>
 
-Tiki is an AI-powered multichannel issue intake platform for organizations.
+<h1 align="center">Tiki</h1>
 
-Tiki helps organizations receive, classify, prioritize, and manage support issues from multiple channels using artificial intelligence. It supports organization-based isolation, Keycloak authentication, issue intake from dashboard and external channels, asynchronous AI analysis, and cloud-ready deployment.
+<p align="center">
+  <strong>AI-powered multichannel issue intake platform for organizations.</strong>
+</p>
+
+<p align="center">
+  Tiki helps organizations receive, classify, prioritize, and manage support issues from multiple channels using artificial intelligence.
+</p>
+
+<p align="center">
+  <a href="https://tiki.cimemyc.online">Live Frontend</a>
+  ·
+  <a href="https://api.tiki.cimemyc.online/api">Backend API</a>
+  ·
+  <a href="https://api.tiki.cimemyc.online/api/docs">Swagger Docs</a>
+  ·
+  <a href="https://auth.tiki.cimemyc.online">Keycloak Auth</a>
+</p>
+
+<p align="center">
+  <img alt="Angular" src="https://img.shields.io/badge/Frontend-Angular-DD0031?style=flat-square&logo=angular&logoColor=white" />
+  <img alt="NestJS" src="https://img.shields.io/badge/Backend-NestJS-E0234E?style=flat-square&logo=nestjs&logoColor=white" />
+  <img alt="PostgreSQL" src="https://img.shields.io/badge/Database-PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white" />
+  <img alt="Redis" src="https://img.shields.io/badge/Queue-Redis-DC382D?style=flat-square&logo=redis&logoColor=white" />
+  <img alt="Docker" src="https://img.shields.io/badge/Infra-Docker-2496ED?style=flat-square&logo=docker&logoColor=white" />
+  <img alt="License" src="https://img.shields.io/badge/License-Apache%202.0-blue?style=flat-square" />
+</p>
+
+---
+
+## About Tiki
 
 Tiki is an initial SaaS release designed for public demonstration and further production hardening.
+
+It provides a centralized platform where organizations can receive support issues from authenticated dashboards, public forms, and Telegram. Each issue can be enriched with AI-generated classification, priority, sentiment, summary, suggested team, suggested response, and tags.
+
+The platform uses organization-based isolation, Keycloak authentication, asynchronous AI processing, and a cloud-ready deployment model.
+
+---
 
 ## Spanish Description
 
 Tiki es una plataforma SaaS para organizaciones que permite recibir, clasificar, priorizar y gestionar issues de soporte desde múltiples canales usando inteligencia artificial.
 
+---
+
 ## Author
 
-Marcelo Antonio Choque Burgoa
+**Marcelo Antonio Choque Burgoa**
+
+---
 
 ## Problem
 
-Support requests often arrive through disconnected channels such as internal dashboards, public forms, and messaging apps. Teams lose context, triage is inconsistent, and urgent issues can be buried behind manual review.
+Support requests usually arrive through disconnected channels such as dashboards, public forms, chat apps, and manual reports.
+
+This creates operational friction:
+
+- requests are difficult to track,
+- urgent issues can be missed,
+- triage depends on manual review,
+- teams lose context across channels,
+- external users need a simple reporting flow,
+- support teams spend time summarizing instead of solving.
+
+---
 
 ## Solution
 
-Tiki centralizes issue intake for each organization and enriches incoming requests with AI-generated title, summary, category, priority, sentiment, suggested team, suggested response, and tags. The platform keeps organizations isolated by `organizationId` and processes AI analysis asynchronously so HTTP requests stay responsive.
+Tiki centralizes issue intake per organization and enriches every request with AI-assisted triage.
+
+The platform helps teams:
+
+- receive issues from multiple channels,
+- keep organization data isolated,
+- classify and prioritize requests automatically,
+- process AI analysis asynchronously,
+- manage internal members and roles,
+- track support activity from one professional dashboard.
+
+---
+
+## Screenshots
+
+Add your screenshots inside:
+
+```text
+docs/screenshots/
+```
+
+Recommended files:
+
+```text
+docs/screenshots/landing.png
+docs/screenshots/dashboard.png
+docs/screenshots/issues.png
+docs/screenshots/issue-detail.png
+docs/screenshots/telegram-settings.png
+docs/screenshots/public-report.png
+```
+
+### Landing Page
+<img width="2531" height="1102" alt="image" src="https://github.com/user-attachments/assets/01372877-36df-4138-a52a-92345c8aa57e" />
+
+
+
+
+### Dashboard
+<img width="2146" height="973" alt="image" src="https://github.com/user-attachments/assets/73a73c02-940c-47e5-bfc3-898a47430db9" />
+
+ 
+### Issues
+<img width="2531" height="1102" alt="image" src="https://github.com/user-attachments/assets/23c112ca-059d-4ce6-b56d-4b408c7a7136" />
+
+
+### Issue Detail
+<img width="2146" height="973" alt="image" src="https://github.com/user-attachments/assets/bebd3044-48f6-4d99-85bf-7c0a83416624" />
+
+
+### Telegram Settings
+
+![Telegram settings](docs/screenshots/telegram-settings.png)
+
+### Public Report
+
+![Public report](docs/screenshots/public-report.png)
+
+---
+
+## Core Features
+
+| Area | Capability |
+|---|---|
+| Authentication | Login, registration, logout, and token issuance through Keycloak |
+| Organizations | Organization-based tenancy with isolated data |
+| Memberships | Internal roles such as `ORG_ADMIN`, `AGENT`, and `VIEWER` |
+| Issues | Create, list, filter, update, and resolve issues |
+| Public Intake | External users can report issues without login |
+| Telegram Intake | One shared Telegram bot can route messages to the correct organization |
+| AI Triage | AI-generated title, summary, category, priority, sentiment, team, response, and tags |
+| Queue Processing | Redis and BullMQ process AI analysis asynchronously |
+| Auditability | Important organization, issue, and integration actions are logged |
+| Deployment | Angular on GitHub Pages, backend services on Oracle Cloud VM |
+
+---
 
 ## Architecture
+
+```text
+Browser
+  |
+  | HTTPS
+  v
+GitHub Pages / Custom Domain
+Angular Frontend
+  |
+  | HTTPS
+  v
+Oracle Cloud VM
+Nginx Reverse Proxy
+  |
+  |-- /api  -> NestJS Backend
+  |-- /auth -> Keycloak
+              |
+              |-- PostgreSQL App Database
+              |-- PostgreSQL Keycloak Database
+              |-- Redis + BullMQ
+```
+
+---
+
+## Repository Structure
 
 ```text
 Tiki/
@@ -38,118 +190,171 @@ Tiki/
 ├── docker-compose.prod.yml
 ├── .env.example
 ├── .gitignore
+├── LICENSE
 └── README.md
 ```
 
-Frontend:
-
-- Angular hosted on GitHub Pages.
-- Public URL: `https://<github-user>.github.io/Tiki/`.
-
-Backend:
-
-- NestJS hosted on an Oracle Cloud VM.
-- Public API URL: `https://api.example.com/api`.
-- Public Keycloak URL: `https://api.example.com/auth`.
-
-Services on the Oracle VM:
-
-- NestJS backend
-- Keycloak
-- PostgreSQL for the application
-- PostgreSQL for Keycloak
-- Redis and BullMQ
-- Nginx reverse proxy
-
-The backend is a modular monolith. This keeps deployment simple while preserving clean boundaries between auth, organizations, issues, AI analysis, public intake, Telegram intake, queues, and audit logging.
-
-## Main Features
-
-- Keycloak authentication.
-- Organization-based tenancy.
-- Internal organization memberships and roles.
-- Issue management from the dashboard.
-- Public issue intake by organization slug.
-- Telegram issue intake through one shared bot.
-- AI-powered issue classification and suggested responses.
-- Asynchronous processing with Redis and BullMQ.
-- Professional Angular dashboard.
-- GitHub Pages frontend deployment.
-- Oracle VM backend deployment with Docker Compose and Nginx.
+---
 
 ## Technical Stack
 
-- Frontend: Angular, TypeScript, Angular Router, Angular Material, Keycloak JS Adapter.
-- Backend: NestJS, TypeScript, Prisma ORM, PostgreSQL, Swagger/OpenAPI, class-validator, class-transformer.
-- Authentication: Keycloak.
-- Queue: Redis and BullMQ.
-- Infrastructure: Docker Compose and Nginx.
-- Deployment: GitHub Pages for frontend, Oracle Cloud VM for backend services.
+### Frontend
 
-## Repository Setup
+- Angular
+- TypeScript
+- Angular Router
+- Angular Material
+- Keycloak JS Adapter
+- HTTP interceptors
+- Route guards
+- Domain-based services
+
+### Backend
+
+- NestJS
+- TypeScript
+- Prisma ORM
+- PostgreSQL
+- Redis
+- BullMQ
+- Keycloak JWT validation
+- Swagger/OpenAPI
+- class-validator
+- class-transformer
+- Helmet
+- Docker
+
+### Infrastructure
+
+- Docker Compose
+- Nginx reverse proxy
+- GitHub Actions
+- GitHub Pages
+- Oracle Cloud VM
+
+---
+
+## Public URLs
+
+| Service | URL |
+|---|---|
+| Frontend | `https://tiki.cimemyc.online` |
+| Backend API | `https://api.tiki.cimemyc.online/api` |
+| Swagger Docs | `https://api.tiki.cimemyc.online/api/docs` |
+| Keycloak | `https://auth.tiki.cimemyc.online` |
+
+---
+
+## Local Development
+
+Install dependencies:
 
 ```bash
-git init
-git add .
-git commit -m "initial Tiki platform release"
-git branch -M main
-git remote add origin https://github.com/<github-user>/Tiki.git
-git push -u origin main
+npm install
 ```
+
+Start local infrastructure:
+
+```bash
+docker compose up -d postgres_app postgres_keycloak redis keycloak
+```
+
+Generate Prisma Client:
+
+```bash
+npm run prisma:generate
+```
+
+Run migrations:
+
+```bash
+npm run prisma:migrate:deploy
+```
+
+Start backend and frontend:
+
+```bash
+npm run dev:backend
+npm run dev:frontend
+```
+
+Local URLs:
+
+```text
+Frontend: http://localhost:4210
+Backend: http://localhost:3100
+Swagger: http://localhost:3100/api/docs
+Keycloak: http://localhost:8180
+```
+
+---
+
+## Docker Deployment
+
+Start backend platform services:
+
+```bash
+docker compose up -d --build
+```
+
+Check service status:
+
+```bash
+docker compose ps
+```
+
+View logs:
+
+```bash
+docker compose logs -f backend
+docker compose logs -f keycloak
+docker compose logs -f nginx
+```
+
+Apply database migrations:
+
+```bash
+docker compose exec backend npx prisma migrate deploy --schema backend/prisma/schema.prisma
+```
+
+---
 
 ## GitHub Pages Deployment
 
-Enable GitHub Pages:
+The Angular frontend is deployed through GitHub Actions.
 
-1. Open the GitHub repository settings.
-2. Go to Pages.
-3. Set Source to GitHub Actions.
-4. Push to `main`.
-
-The workflow in `.github/workflows/frontend-pages.yml` builds Angular with:
+Build command:
 
 ```bash
 npm run build:pages
 ```
 
-The frontend is built with:
-
-```bash
-ng build --configuration production --base-href /Tiki/
-```
-
-Final frontend URL:
+The production frontend should point to:
 
 ```text
-https://<github-user>.github.io/Tiki/
+https://api.tiki.cimemyc.online/api
+https://auth.tiki.cimemyc.online
 ```
 
-Optional GitHub repository variables for the Pages workflow:
+GitHub Pages source:
 
 ```text
-TIKI_API_BASE_URL=https://api.example.com/api
-TIKI_KEYCLOAK_URL=https://api.example.com/auth
-TIKI_KEYCLOAK_REALM=tiki
-TIKI_KEYCLOAK_CLIENT_ID=tiki-frontend
+GitHub Actions
 ```
 
-If these variables are not configured, the workflow uses safe placeholders.
+Workflow:
+
+```text
+.github/workflows/frontend-pages.yml
+```
+
+---
 
 ## Oracle VM Deployment
 
-Prepare the VM:
+Connect to the VM:
 
 ```bash
-sudo apt update && sudo apt upgrade -y
-sudo apt install -y ca-certificates curl gnupg git
-```
-
-Install Docker and the Docker Compose plugin using Docker's official installation guide for Ubuntu.
-
-Connect to the VM from your local machine:
-
-```bash
-chmod 600 ~/Downloads/ssh-key-2026-05-08.key
 ssh -i ~/Downloads/ssh-key-2026-05-08.key ubuntu@<vm-ip>
 ```
 
@@ -157,7 +362,7 @@ Clone the repository:
 
 ```bash
 cd /home/ubuntu
-git clone https://github.com/<github-user>/Tiki.git
+git clone https://github.com/Fooumukni/Tiki.git
 cd Tiki
 ```
 
@@ -168,37 +373,31 @@ cp .env.example .env
 nano .env
 ```
 
-Start the backend platform services:
+Start services:
 
 ```bash
 docker compose up -d --build
-docker compose ps
-docker compose logs -f backend
-docker compose logs -f keycloak
-docker compose logs -f nginx
+```
+
+Run migrations:
+
+```bash
 docker compose exec backend npx prisma migrate deploy --schema backend/prisma/schema.prisma
 ```
 
-Smoke test URLs before HTTPS/domain setup:
+Smoke test:
 
-```text
-http://<vm-ip>/api/health
-http://<vm-ip>/api/docs
-http://<vm-ip>/auth
+```bash
+curl https://api.tiki.cimemyc.online/api/health
+curl https://api.tiki.cimemyc.online/api/docs
+curl https://auth.tiki.cimemyc.online
 ```
 
-For GitHub Pages browser usage, expose the backend through HTTPS:
+---
 
-```text
-https://api.example.com/api
-https://api.example.com/auth
-```
+## Production Environment
 
-Using an HTTP backend from an HTTPS GitHub Pages frontend may be blocked by the browser as mixed content.
-
-## Production Environment Variables
-
-Create `.env` on the VM. Do not commit it.
+Create a real `.env` file on the VM. Do not commit it.
 
 Important values:
 
@@ -206,54 +405,29 @@ Important values:
 NODE_ENV=production
 BACKEND_PORT=3100
 
-POSTGRES_APP_DB=tiki_app
-POSTGRES_APP_USER=tiki_app
-POSTGRES_APP_PASSWORD=<strong-app-database-password>
+FRONTEND_URL=https://tiki.cimemyc.online
+APP_BASE_URL=https://api.tiki.cimemyc.online
+APP_CORS_ORIGIN=https://tiki.cimemyc.online
 
-POSTGRES_KEYCLOAK_DB=tiki_keycloak
-POSTGRES_KEYCLOAK_USER=tiki_keycloak
-POSTGRES_KEYCLOAK_PASSWORD=<strong-keycloak-database-password>
-
-DATABASE_URL=postgresql://tiki_app:<strong-app-database-password>@postgres_app:5432/tiki_app?schema=public
-
-REDIS_HOST=redis
-REDIS_PORT=6379
-REDIS_PASSWORD=<optional-redis-password>
-
-KEYCLOAK_ADMIN=<admin-user>
-KEYCLOAK_ADMIN_PASSWORD=<strong-keycloak-admin-password>
 KEYCLOAK_REALM=tiki
 KEYCLOAK_FRONTEND_CLIENT_ID=tiki-frontend
 KEYCLOAK_BACKEND_CLIENT_ID=tiki-api
 KEYCLOAK_AUDIENCE=tiki-api
-KEYCLOAK_ISSUER_URL=https://api.example.com/auth/realms/tiki
-KEYCLOAK_JWKS_URI=https://api.example.com/auth/realms/tiki/protocol/openid-connect/certs
-KEYCLOAK_BASE_URL=https://api.example.com/auth
+KEYCLOAK_BASE_URL=https://auth.tiki.cimemyc.online
+KEYCLOAK_ISSUER_URL=https://auth.tiki.cimemyc.online/realms/tiki
+KEYCLOAK_JWKS_URI=https://auth.tiki.cimemyc.online/realms/tiki/protocol/openid-connect/certs
 
-FRONTEND_URL=https://<github-user>.github.io
-APP_BASE_URL=https://api.example.com
-APP_CORS_ORIGIN=https://<github-user>.github.io
+REDIS_HOST=redis
+REDIS_PORT=6379
 
 AI_PROVIDER=mock
-OPENAI_API_KEY=
-OPENAI_MODEL=gpt-4.1-mini
-GEMINI_API_KEY=
-GEMINI_MODEL=gemini-2.0-flash
-
-TELEGRAM_BOT_TOKEN=
-TELEGRAM_WEBHOOK_SECRET=
-TELEGRAM_BOT_USERNAME=
 ```
 
-For GitHub Pages, `FRONTEND_URL` must be the origin only:
+Database passwords, Keycloak admin password, Telegram bot token, webhook secret, OpenAI key, and Gemini key must only exist in the real `.env`.
 
-```text
-https://<github-user>.github.io
-```
+---
 
-Do not include `/Tiki` in CORS origins.
-
-## Keycloak Manual Configuration
+## Keycloak Configuration
 
 Realm:
 
@@ -280,9 +454,30 @@ Client type: OpenID Connect
 Access type: Public
 Standard flow: Enabled
 PKCE: S256
-Valid redirect URIs: https://<github-user>.github.io/Tiki/*
-Valid post logout redirect URIs: https://<github-user>.github.io/Tiki/*
-Web origins: https://<github-user>.github.io
+```
+
+Valid redirect URIs:
+
+```text
+https://tiki.cimemyc.online/*
+https://fooumukni.github.io/Tiki/*
+http://localhost:4210/*
+```
+
+Valid post logout redirect URIs:
+
+```text
+https://tiki.cimemyc.online/*
+https://fooumukni.github.io/Tiki/*
+http://localhost:4210/*
+```
+
+Web origins:
+
+```text
+https://tiki.cimemyc.online
+https://fooumukni.github.io
+http://localhost:4210
 ```
 
 Realm roles:
@@ -292,43 +487,9 @@ platform_user
 platform_admin
 ```
 
-Organization roles such as `ORG_ADMIN`, `AGENT`, and `VIEWER` are managed inside the application database, not in Keycloak.
+Application organization roles such as `ORG_ADMIN`, `AGENT`, and `VIEWER` are managed inside the application database.
 
-## Local Development
-
-Install dependencies:
-
-```bash
-npm install
-```
-
-Run backend and frontend separately:
-
-```bash
-npm run dev:backend
-npm run dev:frontend
-```
-
-Local URLs:
-
-```text
-Frontend: http://localhost:4210
-Backend: http://localhost:3100
-Swagger: http://localhost:3100/api/docs
-Keycloak: http://localhost:8180
-```
-
-Generate Prisma Client:
-
-```bash
-npm run prisma:generate
-```
-
-Run migrations:
-
-```bash
-npm run prisma:migrate:deploy
-```
+---
 
 ## Verification Commands
 
@@ -349,7 +510,7 @@ npx prisma generate
 npm run build
 ```
 
-Frontend GitHub Pages build:
+Frontend build:
 
 ```bash
 cd frontend
@@ -362,31 +523,38 @@ Docker checks:
 docker compose config
 docker compose up -d --build
 docker compose ps
-docker compose logs -f backend
-docker compose logs -f keycloak
-docker compose logs -f nginx
-docker compose exec backend npx prisma migrate deploy --schema backend/prisma/schema.prisma
 ```
+
+---
+
+## Security Notes
+
+- The backend validates JWTs issued by Keycloak.
+- The backend never handles passwords.
+- Secrets are not committed to the repository.
+- PostgreSQL and Redis are not publicly exposed.
+- Public endpoints use rate limiting.
+- Organization access is checked through internal memberships.
+- AI usage is limited per organization.
+- Telegram webhooks require a secret header.
+- HTTPS is required for production browser usage.
+
+---
 
 ## Roadmap
 
-- HTTPS with a custom backend domain.
-- Production-grade Keycloak configuration.
-- Monitoring and observability.
-- Expanded AI usage controls per organization.
-- Email intake.
-- WhatsApp intake.
-- Billing.
-- Tenant administration panel.
-- Audit reporting.
-
-## Technical Pitch
-
-Tiki is an AI-powered multichannel issue intake platform for organizations. It allows teams to receive support issues through a dashboard, public forms, and Telegram, then automatically classify, prioritize, summarize, and route them using AI. The architecture uses Angular on GitHub Pages for the frontend, while NestJS, Keycloak, PostgreSQL, Redis, and Nginx run on an Oracle Cloud VM. Each organization is isolated through `organizationId`, and AI analysis is processed asynchronously.
-
-## Pitch Técnico En Español
-
-Tiki es una plataforma SaaS para la recepción inteligente de issues en organizaciones. Permite recibir solicitudes desde un dashboard, formularios públicos y Telegram, para luego clasificarlas, priorizarlas, resumirlas y enroutarlas usando inteligencia artificial. La arquitectura usa Angular en GitHub Pages para el frontend, mientras que NestJS, Keycloak, PostgreSQL, Redis y Nginx se ejecutan en una VM de Oracle Cloud. Cada organización está aislada mediante `organizationId`, y el análisis con IA se procesa de forma asíncrona.
+- Production-grade Keycloak hardening
+- Automated TLS certificate renewal
+- Monitoring and observability
+- Email intake
+- WhatsApp intake
+- Billing and subscription plans
+- Tenant administration panel
+- Audit reporting
+- Advanced AI routing rules
+- Team assignment workflows
+- 
+---
 
 ## Project Conventions
 
@@ -396,4 +564,12 @@ Tiki es una plataforma SaaS para la recepción inteligente de issues en organiza
 - Controllers stay thin and delegate business logic to services.
 - Authentication stays separate from organization authorization.
 - Docker Compose runs backend platform services for the VM.
-- GitHub Pages hosts the Angular frontend.
+- GitHub Pages or a custom domain hosts the Angular frontend.
+
+---
+
+## License
+
+This project is licensed under the **Apache License 2.0**.
+
+See [LICENSE](LICENSE) for details.
